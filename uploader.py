@@ -18,13 +18,20 @@ def GetFolderID(dname, parents_id):
 
     return folder_id
 
+def GetRootID():
+    file_iter=drive.ListFile({'q':'"root" in parents and trashed=false', 'maxResults':10})
+    for file_list in file_iter:
+        for f in file_list:
+            if f['parents'][0]['isRoot']:
+                return f['parents'][0]['id']
+
+
 def GetPathID(r_path, parents_id):
     dname=r_path.split("/")
     for d in dname:
         if d!="":
             parents_id=GetFolderID(d, parents_id)
     return parents_id
-        
 
 def Update(file_path, parents_id):
     root, fname=os.path.split(file_path)
@@ -44,7 +51,7 @@ def Update(file_path, parents_id):
         print "File {} uploaded".format(fname)
 
 
-
+print "Autherizting.................."
 gauth = GoogleAuth()
 # Try to load saved client credentials
 gauth.LoadCredentialsFile("mycreds.txt")
@@ -62,15 +69,29 @@ gauth.SaveCredentialsFile("mycreds.txt")
 
 drive=GoogleDrive(gauth)
 
-HOME_DIR='/home/pi/New'
-root_id='0B4Q9hJD-SUamcm5CV1FzcFhYWjQ'
+print "Done"
+
+HOME_DIR='/home/pi'
+root_id=GetRootID()
+
 
 os.chdir(HOME_DIR)
 
 for root, dirs, files in os.walk(os.getcwd()):
     r_path=root.split(HOME_DIR)[1]
-    path_id=GetPathID(r_path, root_id)
+    while(True):
+        try:
+            path_id=GetPathID(r_path, root_id)
+            break
+        except:
+            print "error...retrying..."
+
     for fname in files:
         file_path=os.path.join(root, fname)
-        Update(file_path, path_id)
-        
+        while(True):
+            try:
+                Update(file_path, path_id)
+                break
+            except:
+                print "error....retring...."
+
