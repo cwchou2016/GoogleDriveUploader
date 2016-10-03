@@ -93,6 +93,8 @@ def KeepTrying(num, func, **kwargs):
             return e
 
 
+os.system("date > ~/New/run_last.txt ")
+
 print "Autherizting..................",
 gauth = GoogleAuth()
 # Try to load saved client credentials
@@ -130,5 +132,7 @@ for root, dirs, files in os.walk(os.getcwd()):
         msg = KeepTrying(10, Update, file_path=file_path, parents_id=path_id)
         if msg is not None:
             print msg
+
+os.system("date >> ~/New/run_last.txt ")
 
 print "Upload complete"
