@@ -10,5 +10,5 @@ It's based on pydrive. https://github.com/googledrive/PyDrive
 
 ### NOTES
 * Authentication: https://googledrive.github.io/PyDrive/docs/build/html/quickstart.html
-* settings.yaml for auto refresh toaken and save credential
+* [settings.yaml](/yaml_setting/settings.yaml) for auto refresh toaken and save credential
 
