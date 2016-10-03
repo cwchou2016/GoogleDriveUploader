@@ -2,6 +2,7 @@ client_secrets.json
 credentials.json
 mycreds.txt
 nohup.out
-settings.yaml
 test*
+!yaml_setting/
+settings.yaml
 
