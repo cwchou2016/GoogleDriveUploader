@@ -1,6 +1,6 @@
 # GoogleDriveUploader
 Python script of Google drive uploader for raspberry pi. <br>
-It's based on pydrive. https://github.com/googledrive/PyDrive
+It's based on [pydrive](https://github.com/googledrive/PyDrive).
 
 ### UPDATES
 * **2016-09-14 UPDATE** <br>
