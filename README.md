@@ -5,8 +5,9 @@ It's based on [pydrive](https://github.com/googledrive/PyDrive).
 ### UPDATES
 * **2016-09-14 UPDATE** <br>
   Httplib2 error keeps showing up from time to time.
-  It's assumed to be caused by unstable wifi connection of raspberry pi 3.
-  So a stupid "try and except" method was used to avoid this error.
+  I assumed it's caused by the unstable wifi connection of raspberry pi 3.
+  So I used a simple "try and except" method to avoid this error.
+  Hoping other people have better solutions.
 
 ### NOTES
 * Authentication: https://googledrive.github.io/PyDrive/docs/build/html/quickstart.html
