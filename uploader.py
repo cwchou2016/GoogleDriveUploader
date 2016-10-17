@@ -93,12 +93,11 @@ def KeepTrying(num, func, **kwargs):
             return e
 
 
-os.system("date > ~/New/run_last.txt ")
 
 print "Autherizting..................",
 gauth = GoogleAuth()
 # Try to load saved client credentials
-gauth.LoadCredentialsFile("mycreds.txt")
+gauth.LoadCredentialsFile("~/mycreds.txt")
 if gauth.credentials is None:
     # Authenticate if they're not there
     gauth.LocalWebserverAuth()
@@ -109,7 +108,7 @@ else:
     # Initialize the saved creds
     gauth.Authorize()
 # Save the current credentials to a file
-gauth.SaveCredentialsFile("mycreds.txt")
+gauth.SaveCredentialsFile("~/mycreds.txt")
 
 drive = GoogleDrive(gauth)
 
@@ -133,6 +132,5 @@ for root, dirs, files in os.walk(os.getcwd()):
         if msg is not None:
             print msg
 
-os.system("date >> ~/New/run_last.txt ")
 
 print "Upload complete"
