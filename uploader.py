@@ -97,7 +97,11 @@ def KeepTrying(num, func, **kwargs):
 print "Autherizting..................",
 gauth = GoogleAuth()
 # Try to load saved client credentials
+<<<<<<< HEAD
 gauth.LoadCredentialsFile("/home/pi/mycreds.txt")
+=======
+gauth.LoadCredentialsFile("~/mycreds.txt")
+>>>>>>> 142a7a4481c732b2791321bf4593e3a461a2738f
 if gauth.credentials is None:
     # Authenticate if they're not there
     gauth.LocalWebserverAuth()
@@ -108,7 +112,11 @@ else:
     # Initialize the saved creds
     gauth.Authorize()
 # Save the current credentials to a file
+<<<<<<< HEAD
 gauth.SaveCredentialsFile("/home/pi/mycreds.txt")
+=======
+gauth.SaveCredentialsFile("~/mycreds.txt")
+>>>>>>> 142a7a4481c732b2791321bf4593e3a461a2738f
 
 drive = GoogleDrive(gauth)
 
