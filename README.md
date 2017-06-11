@@ -1,8 +1,11 @@
 # GoogleDriveUploader
 Python script of Google drive uploader for raspberry pi. <br>
-It's based on [pydrive](https://github.com/googledrive/PyDrive).
+
 
 ### UPDATES
+* **2017-06-11 UPDATE** <br>
+  Rewrite with Google Drive API v3
+  
 * **2016-09-14 UPDATE** <br>
   Httplib2 error keeps showing up from time to time.
   I assumed it's caused by the unstable wifi connection of raspberry pi 3.
