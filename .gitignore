@@ -1,2 +1,3 @@
 *.json
-setting*
+/setting.py
+*.pyc
