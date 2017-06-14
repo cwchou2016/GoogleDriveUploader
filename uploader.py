@@ -4,13 +4,15 @@ import os
 
 import httplib2
 from apiclient import discovery
+from apiclient.http import MediaFileUpload
 
 import quickstart
+import setting
 
 SCOPE = 'https://www.googleapis.com/auth/drive'
-ROOT = '0B4Q9hJD-SUamd0JMX0ZHcHViaTg'  # gdrive /test
+ROOT = setting.ROOT
 # ROOT = 'root'  # Google drive folder id
-PATH = '/home/pi/python/DriveUploader/testfolder/'  # local upload folder
+PATH = setting.PATH
 
 
 class DriveService():
@@ -128,8 +130,10 @@ class DriveService():
         fname = os.path.split(file_r_path)[1]
 
         metadata = {"name": fname, "parents": [parent_id]}
+
+        mbody = MediaFileUpload(file_r_path, resumable=True)
         f = self.service.files().create(
-            body=metadata, media_body=file_r_path).execute()
+            body=metadata, media_body=mbody).execute()
 
         print "{}......................Complete\n".format(f['id'])
 
@@ -162,15 +166,11 @@ if __name__ == '__main__':
     print "The following directory is going to upload to google drive:"
     print os.getcwd()
 
-    print "\nChecking files to upload:"
-    to_upload = service.getlocalfiles()['upload']
+    for root, folder, files in os.walk(PATH):
+        r_path = root.split(PATH)[1]
+        for f in files:
+            folder_id = service.getpathID(r_path)
 
-    if not to_upload:
-        print "\nNo file to upload."
-    else:
-        print "\nUploading......"
-
-        for f_path, parent_id in to_upload:
-
-            print f_path
-            service.upload(f_path, parent_id)
+            if service.fileondrive(f, folder_id) is False:
+                f_path = os.path.join(root, f)
+                service.upload(f_path, folder_id)
