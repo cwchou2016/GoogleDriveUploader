@@ -1,8 +1,20 @@
 # GoogleDriveUploader
 Python script of Google drive uploader for raspberry pi. <br>
 
+Create setting.py:
+
+    # Local directory to upload
+    PATH=       # your value
+    
+    # Google drive folder id
+    ROOT=       # your value
+   
 
 ### UPDATES
+* *82017-06-14 UPDATE** <br>
+  Fix bugs
+  Use setting.py to assign values
+  
 * **2017-06-11 UPDATE** <br>
   Rewrite with Google Drive API v3
   
@@ -13,6 +25,5 @@ Python script of Google drive uploader for raspberry pi. <br>
   Hoping other people have better solutions.
 
 ### NOTES
-* Authentication: https://googledrive.github.io/PyDrive/docs/build/html/quickstart.html
-* [settings.yaml](/yaml_setting/settings.yaml) for auto refresh toaken and save credential
+
 
