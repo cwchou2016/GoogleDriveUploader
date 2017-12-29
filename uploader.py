@@ -102,6 +102,17 @@ class DriveService():
             print '{} was not found, preparing upload'.format(fname)
             return False
 
+    def getfiles(self, folder_id):
+        """List all files under a specific folder on drive.
+        """
+        result = self.service.files().list(
+            q='trashed = False and "{}" in parents'.format(folder_id),
+            fields="files(name, id, mimeType, parents)"
+        ).execute().get('files', [])
+
+        print result
+        return result
+
     def getlocalfiles(self, path=PATH):
         '''Get all files and folders in PATH
 
@@ -137,6 +148,16 @@ class DriveService():
 
         print "{}......................Complete\n".format(f['id'])
 
+    def emptyTrash(self):
+        """Empty Tash
+        Return:
+            None
+        """
+        try:
+            self.service.files().delete(fileId='trash').execute()
+            print "Trash is empty"
+        except Exception as e:
+            print e
 
 def test_authorization():
     service = DriveService()
@@ -162,8 +183,10 @@ if __name__ == '__main__':
 
     service = DriveService()
 
+    #  service.getfiles(ROOT)
+    service.emptyTrash()
     os.chdir(PATH)
-    print "The following directory is going to upload to google drive:"
+    print "the following directory is going to upload to google drive:"
     print os.getcwd()
 
     for root, folder, files in os.walk(PATH):
