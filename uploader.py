@@ -159,6 +159,21 @@ class DriveService():
         except Exception as e:
             print e
 
+
+    def toTrash(self, file_id):
+        """Move a file to trash.
+        Return:
+            None
+        """
+        try:
+            f = self.service.files().update(fileId=file_id,
+                body={'trashed':True}).execute()
+
+            print "{} is moved to trash.".format(f['name'])
+        except Exception as e:
+            print e
+
+
 def test_authorization():
     service = DriveService()
 
@@ -177,7 +192,7 @@ def test_authorization():
             print "{}, ({})".format(item['name'], item['id'])
 
 
-if __name__ == '__main__':
+def defaultMain():
     #  test_authorization()
     #  print "test OK"
 
@@ -197,3 +212,19 @@ if __name__ == '__main__':
             if service.fileondrive(f, folder_id) is False:
                 f_path = os.path.join(root, f)
                 service.upload(f_path, folder_id)
+
+
+def testMain():
+    service = DriveService()
+
+    os.chdir(PATH)
+    print "The following directory is going to upload to Google Drive:"
+    print os.getcwd()
+
+    #  service.emptyTrash()
+
+    res = service.service.files().list().execute().get('files', [])
+    print res
+
+if __name__ == '__main__':
+    testMain()
