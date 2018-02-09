@@ -13,6 +13,7 @@ SCOPE = 'https://www.googleapis.com/auth/drive'
 ROOT = setting.ROOT
 # ROOT = 'root'  # Google drive folder id
 PATH = setting.PATH
+TYPE_FOLDER = u'application/vnd.google-apps.folder'
 
 
 class DriveService():
@@ -148,7 +149,7 @@ class DriveService():
 
         print "{}......................Complete\n".format(f['id'])
 
-    def emptyTrash(self):
+    def emptytrash(self):
         """Empty Tash
         Return:
             None
@@ -159,19 +160,67 @@ class DriveService():
         except Exception as e:
             print e
 
-
-    def toTrash(self, file_id):
+    def movetotrash(self, file_id):
         """Move a file to trash.
         Return:
             None
         """
         try:
             f = self.service.files().update(fileId=file_id,
-                body={'trashed':True}).execute()
+                                            body={'trashed': True}).execute()
 
             print "{} is moved to trash.".format(f['name'])
         except Exception as e:
             print e
+
+    def getFileMime(self, file_id):
+        '''Get file's mime from file id
+        Return:
+            Google_files_mime
+        '''
+        res = self.service.files().list(
+            q='trashed = false')
+
+        res = res.execute().get('files', [])
+
+        for item in res:
+            if item.get(u'id') == file_id:
+                return item
+        else:
+            return None
+
+    def walkFolder(self, folder_mime, path_name='/'):
+        '''Walkthough all files and folders a on Google Drive folder.
+        Return:
+            list
+        '''
+        # Get files under a folder
+        # If the file is a folder, get files under those folder.
+        files = []
+        res = self.service.files().list(
+            q='trashed = false ' +
+            'and "{}" in parents'.format(folder_mime[u'id']))
+
+        res = res.execute().get('files', [])
+
+        for item in res:
+            if item.get('mimeType') == TYPE_FOLDER:
+                # print item[u'name']
+                res = self.walkFolder(item, path_name + item[u'name'] + '/')
+                files.extend(res)
+                # yield res
+
+            else:
+                file_name = path_name + item[u'name']
+                files.append(file_name)
+                #  yield file_name
+
+        return files
+
+    def download(self, file_id, local_path):
+        '''Download a google drive file to the local path.
+        '''
+        pass
 
 
 def test_authorization():
@@ -223,8 +272,36 @@ def testMain():
 
     #  service.emptyTrash()
 
-    res = service.service.files().list().execute().get('files', [])
-    print res
+    res = service.service.files().list(
+        q='trashed = false and "{}" in parents'.format(ROOT)).execute()
+    res = res.get('files', [])
+
+    folders = []
+    files = []
+    for item in res:
+        print item
+
+        # for subitem in [u'mimeType', u'name', u'id']:
+        #     print item.get(subitem)
+        if item.get(u'mimeType') == TYPE_FOLDER:
+            folders.append(item)
+        else:
+            files.append(item.get(u'name'))
+
+    print folders
+    print files
+
+
+def testFunc2():
+    service = DriveService()
+
+    file_mime = service.getFileMime(ROOT)
+
+    res = service.walkFolder(file_mime)
+
+    for item in res:
+        print item
+
 
 if __name__ == '__main__':
-    testMain()
+    testFunc2()
